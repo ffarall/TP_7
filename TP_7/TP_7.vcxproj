@@ -115,6 +115,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BasicLCD.cpp" />
+    <ClCompile Include="ErrLCD.cpp" />
+    <ClCompile Include="FTDIHandler.cpp" />
+    <ClCompile Include="HD44780LCD.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BasicLCD.h" />
+    <ClInclude Include="ErrLCD.h" />
+    <ClInclude Include="ftd2xx.h" />
+    <ClInclude Include="FTDIHandler.h" />
+    <ClInclude Include="HD44780LCD.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
