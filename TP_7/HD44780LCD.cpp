@@ -6,7 +6,7 @@ HD44780LCD::HD44780LCD(): err()
 {
 	try
 	{
-		handler = FTDIHandler();
+		handler = new FTDIHandler();
 	}
 	catch (ErrType type_)
 	{
@@ -18,4 +18,5 @@ HD44780LCD::HD44780LCD(): err()
 
 HD44780LCD::~HD44780LCD()
 {
+	delete handler;
 }

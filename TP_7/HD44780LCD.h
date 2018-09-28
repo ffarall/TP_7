@@ -26,7 +26,7 @@ public:
 protected:
 	int cadd;
 	ErrLCD err;	// Contains FT_STATUS
-	FTDIHandler handler;
+	FTDIHandler * handler;
 
 	void lcdUpdateCursor();
 };
