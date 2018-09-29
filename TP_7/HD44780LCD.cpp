@@ -92,6 +92,19 @@ bool HD44780LCD::lcdMoveCursorUp()
 	}
 }
 
+bool HD44780LCD::lcdSetCursorPosition(const cursorPosition pos)
+{
+	return false;
+}
+
+cursorPosition HD44780LCD::lcdGetCursorPosition()
+{
+	cursorPosition temp;
+	temp.row = cadd > 15 ? 2 : 1;
+	temp.column = temp.row == 1 ? cadd : cadd - 16; //si cadd esta en la primera fila entonces cadd me dice fila, sino le resto 16 para corregir
+	return temp;
+}
+
 void HD44780LCD::lcdUpdateCursor(int newCadd)
 {
 	cadd = newCadd;
