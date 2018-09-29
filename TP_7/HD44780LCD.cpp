@@ -18,8 +18,6 @@ HD44780LCD::HD44780LCD(): err()
 	{
 		err.set_type(type_);
 	}
-
-
 }
 
 
