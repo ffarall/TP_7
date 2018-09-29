@@ -3,13 +3,16 @@
 
 #define CLEAR_DISPLAY 0x01
 #define SPACE_ASCII 0x20
+#define SECOND_LINE_ADDRESS 0x40
+#define SET_DDRAM_ADDRESS(x) (x) | 0x80		// To the address x, makes sure bit 7 is 1, because instructio "Set DDRAM address" indicates it.
 
 HD44780LCD::HD44780LCD(): err()
 {
 	try
 	{
-		handler = new FTDIHandler();
-		err.set_type(ErrType::LCD_NO_ERROR);
+		handler = new FTDIHandler();			// Trying to create a FTDIHandler object. This can throw an ErrType exception.
+		err.set_type(ErrType::LCD_NO_ERROR);	// Since there's no errors
+		cadd = 0;								// Initialization of cursor position pointer.
 	}
 	catch (ErrType type_)
 	{
@@ -26,6 +29,7 @@ HD44780LCD::~HD44780LCD()
 }
 
 bool HD44780LCD::lcdInitOk()
+// This function is meant to be called after creating an HD44780LCD object, to check if everything is ok.
 {
 	if (err.get_type() == ErrType::LCD_NO_ERROR)
 	{
@@ -38,6 +42,7 @@ bool HD44780LCD::lcdInitOk()
 }
 
 FT_STATUS HD44780LCD::lcdGetError()
+// Getting error if there was one.
 {
 	return err.get_status();
 }
@@ -51,10 +56,33 @@ bool HD44780LCD::lcdClearToEOL()
 {
 	try
 	{
-		handler->lcdWriteDR(SPACE_ASCII);
+		for (int i = (cadd & 0x0F); i <= 16; i++)		// What matters is the lsb of cadd, because any of the lines is being cleared.
+		{
+			handler->lcdWriteDR(SPACE_ASCII);
+		}
+
+		// Now the cursor has to be put back to its original position.
+		if (cadd <= 16)
+		{
+			handler->lcdWriteIR(SET_DDRAM_ADDRESS(cadd));
+		}
+		else
+		{
+			handler->lcdWriteIR(SET_DDRAM_ADDRESS((cadd & 0x0F) + 0x40));	// If the cursor is on the second line, DDRAM address has to be 0x4_ and not 0x2_.
+		}
+		return true;
 	}
 	catch (ErrType type_)
 	{
 		err.set_type(type_);
+		return false;
+	}
+}
+
+bool HD44780LCD::lcdMoveCursorUp()
+{
+	try
+	{
+
 	}
 }
