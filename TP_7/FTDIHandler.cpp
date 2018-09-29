@@ -1,6 +1,7 @@
 #include "FTDIHandler.h"
 #include <chrono>
 #include <windows.h>
+#include "ErrLCD.h"
 
 #define CONNECTING_TIME 5 //en segundos
 
@@ -26,38 +27,51 @@ FTDIHandler::FTDIHandler()
 			if (FT_SetBitMode(deviceHandler, Mask, Mode) == FT_OK)	// Sets LCD as asynch bit mode. Otherwise it doesn't work.
 			{
 				/*Set 4 bits mode */
-				if (FT_Write(lcdHandle, &info, 1, &sizeSent) == FT_OK)
+				try
 				{
-					//If success continue with the program (...)
+					set4BitsMode();
+					lcdWriteIR(BITMODE4 | LINES2AND5x8);
+					//wait ( 1 )
+					lcdWriteIR(DIPLAYONOFF);
+					//wait ( 1 )
+					lcdWriteIR(CLEAR);
+					//wait( 10 )
+					lcdWriteIR(ENTRYMODE);
 				}
-				else
-					printf("Error writing to the LCD\n");
+				catch ( ErrType type)
+				{
+					throw ErrType::LCD_CHAGE_MODE_ERROR;
+					//not abel to set 4 bit mode trow exeption
+				}
 			}
 			else
-				printf("Couldn't configure LCD\n");
-
+			{
+				throw ErrType::LCD_SETTING_ERROR;
+				//not able to set asynchronous mode trow exeption	
+			}
 		}
 		current = std::chrono::system_clock::now();
 	}
 
 	if (status != FT_OK)
 	{
-		//trow exeption
+		throw ErrType::LCD_NOT_FOUND;
+		//trow exeption unable to open the display
 	}
 	
 }
 
-void FTDIHandler::lcdWriteIR(BYTE valor)
+void FTDIHandler::lcdWriteIR(uint8_t valor)
 {
-	BYTE temp =  ((valor & 0xF0) | ENABLE_1 & RS_IR ) ;
+	uint8_t temp =  ((valor & 0xF0) | ENABLE_1 & RS_IR ) ;
 	lcdWriteNibble(temp);
 	temp = (((valor & 0x0F) << 4) | ENABLE_1 & RS_IR);
 	lcdWriteNibble(temp);
 }
 
-void FTDIHandler::lcdWriteDR(BYTE valor)
+void FTDIHandler::lcdWriteDR(uint8_t valor)
 {
-	BYTE temp = ((valor & 0xF0) | ENABLE_1 | RS_DR);
+	uint8_t temp = ((valor & 0xF0) | ENABLE_1 | RS_DR);
 	lcdWriteNibble(temp);
 	temp = (((valor & 0x0F) << 4) | ENABLE_1 | RS_DR);
 	lcdWriteNibble(temp);
@@ -69,30 +83,37 @@ FTDIHandler::~FTDIHandler()
 
 }
 
-void FTDIHandler::lcdWriteNibble(BYTE value ) 
+void FTDIHandler::lcdWriteNibble(uint8_t value )
 {
 	FT_STATUS status = !FT_OK ;
-	
 	DWORD bytesWriten;
-	status = FT_Write(deviceHandler, value & ENABLE_0 , 1 , bytesWriten);
+	uint8_t temp;
+
+	temp = value & ENABLE_0;
+	status = FT_Write(deviceHandler, &temp , 1 , &bytesWriten);
 	if (status != FT_OK)
 	{
+		throw ErrType::LCD_NO_ESCRIBE;
 		//throw exepction 
 	}
 	status = !FT_OK;
 	//wait ( 2 ) // tiempo en milisegundos
 
-	status = FT_Write(deviceHandler, value | ENABLE_1 , 1, bytesWriten);
+	temp = value | ENABLE_1;
+	status = FT_Write(deviceHandler, &temp , 1, &bytesWriten);
 	if (status != FT_OK)
 	{
+		throw ErrType::LCD_NO_ESCRIBE;
 		//throw exepction 
 	}
 	status = !FT_OK;
 	//wait ( 2 ) // tiempo en milisegundos
-
-	status = FT_Write(deviceHandler, value & ENABLE_0 , 1, bytesWriten);
+	
+	temp = value & ENABLE_0;
+	status = FT_Write(deviceHandler, &temp , 1, &bytesWriten);
 	if (status != FT_OK)
 	{
+		throw ErrType::LCD_NO_ESCRIBE;
 		//throw exepction 
 	}
 	status = !FT_OK;
@@ -101,9 +122,23 @@ void FTDIHandler::lcdWriteNibble(BYTE value )
 
 }
 
-bool FTDIHandler::set4BitsMode(void)
+void FTDIHandler::set4BitsMode(void)
 {
 	bool exito = false;
+	FT_STATUS status = !FT_OK;
+	DWORD bytesWriten;
+	uint8_t value;
 
-	return exito;
+	lcdWriteNibble(BITMODE8);
+	//wait ( 5 ) // tiempo en milisegundos
+
+	lcdWriteNibble(BITMODE8);
+	//wait ( 1 ) // tiempo en milisegundos
+
+	lcdWriteNibble(BITMODE8);
+	//wait ( 1 ) // tiempo en milisegundos
+
+	lcdWriteNibble(BITMODE4);
+	// wait ( 1 ) // tiempo en ms
+
 }
