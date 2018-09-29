@@ -145,6 +145,54 @@ bool HD44780LCD::lcdMoveCursorLeft()
 	}
 }
 
+bool HD44780LCD::lcdSetCursorPosition(const cursorPosition pos)
+{
+	bool error = false;
+	if (pos.row == 2 && cadd <= 16) // si me piden segunda fila y estoy en primera
+	{
+		if (!lcdMoveCursorDown())
+		{
+			error = true;
+		}
+	}
+	else if (pos.row == 1 && cadd > 16 ) // lo contrario
+	{
+		if (!lcdMoveCursorUp())
+		{
+			error = true;
+		}
+	}
+	if (pos.column < cadd % 17 && !error) // si debo moverme a la izquierda
+	{
+		for (int i = 0; i < cadd % 17 - pos.column && !error; i++)
+		{
+			if (!lcdMoveCursorLeft())
+			{
+				error = true;
+			}
+		}
+	}
+	else if( pos.column > cadd % 17 && !error) // a la derecha
+	{
+		for (int i = 0; i < pos.column - cadd % 17 && !error; i++)
+		{
+			if (!lcdMoveCursorRight())
+			{
+				error = true;
+			}
+		}
+	}
+	return !error;
+}
+
+cursorPosition HD44780LCD::lcdGetCursorPosition()
+{
+	cursorPosition temp; //esto esta hecho teniendo en cuenta que cadd va entre 1 y 32 no entre 0 y 31!!!!
+	temp.row = cadd > 16 ? 2 : 1;
+	temp.column = temp.row == 1 ? cadd : cadd - 16; //si cadd esta en la primera fila entonces cadd me dice fila, sino le resto 16 para corregir
+	return temp;
+}
+
 void HD44780LCD::lcdUpdateCursor(int newCadd)
 {
 	cadd = newCadd;
