@@ -111,7 +111,7 @@ bool HD44780LCD::lcdMoveCursorDown()
 
 bool HD44780LCD::lcdSetCursorPosition(const cursorPosition pos)
 {
-	return false;
+	for()
 }
 
 cursorPosition HD44780LCD::lcdGetCursorPosition()
