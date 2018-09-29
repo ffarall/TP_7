@@ -24,10 +24,10 @@ public:
 	virtual cursorPosition lcdGetCursorPosition();
 
 protected:
-	int cadd;
+	int cadd;	// For this implementation, cadd will go from 0x00 to 0x2F for easier operational handling.
 	ErrLCD err;	// Contains FT_STATUS
 	FTDIHandler * handler;
 
-	void lcdUpdateCursor();
+	void lcdUpdateCursor(int newCadd);
 };
 
