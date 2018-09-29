@@ -28,6 +28,6 @@ protected:
 	ErrLCD err;	// Contains FT_STATUS
 	FTDIHandler * handler;
 
-	void lcdUpdateCursor();
+	void lcdUpdateCursor(int newCadd);
 };
 

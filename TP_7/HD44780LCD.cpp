@@ -12,7 +12,7 @@ HD44780LCD::HD44780LCD(): err()
 	{
 		handler = new FTDIHandler();			// Trying to create a FTDIHandler object. This can throw an ErrType exception.
 		err.set_type(ErrType::LCD_NO_ERROR);	// Since there's no errors
-		cadd = 0;								// Initialization of cursor position pointer.
+		lcdUpdateCursor(0);								// Initialization of cursor position pointer.
 	}
 	catch (ErrType type_)
 	{
@@ -83,6 +83,16 @@ bool HD44780LCD::lcdMoveCursorUp()
 {
 	try
 	{
-
+		handler->lcdWriteIR(SET_DDRAM_ADDRESS(cadd & 0x0F));		// Cursor goes to position in the first line, in whichever column it was before.
+		lcdUpdateCursor(cadd & 0x0F);
 	}
+	catch (ErrType type_)
+	{
+		err.set_type(type_);
+	}
+}
+
+void HD44780LCD::lcdUpdateCursor(int newCadd)
+{
+	cadd = newCadd;
 }
