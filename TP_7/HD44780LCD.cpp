@@ -2,6 +2,7 @@
 #include "ErrLCD.h"
 
 #define CLEAR_DISPLAY 0x01
+#define SPACE_ASCII 0x20
 
 HD44780LCD::HD44780LCD(): err()
 {
@@ -9,12 +10,10 @@ HD44780LCD::HD44780LCD(): err()
 	{
 		handler = new FTDIHandler();
 		err.set_type(ErrType::LCD_NO_ERROR);
-		err.update_description();
 	}
 	catch (ErrType type_)
 	{
 		err.set_type(type_);
-		err.update_description();
 	}
 
 
@@ -50,5 +49,12 @@ bool HD44780LCD::lcdClear()
 
 bool HD44780LCD::lcdClearToEOL()
 {
-	return false;
+	try
+	{
+		handler->lcdWriteDR(SPACE_ASCII);
+	}
+	catch (ErrType type_)
+	{
+		err.set_type(type_);
+	}
 }

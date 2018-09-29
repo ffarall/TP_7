@@ -16,11 +16,12 @@ public:
 	string get_description();
 	FT_STATUS get_status();
 
-	void update_description();	// Sets description corresponding to type.
 
 private:
 	ErrType type;
 	string description;
 	FT_STATUS ftStatus;
+
+	void update_description();	// Sets description corresponding to type.
 };
 
