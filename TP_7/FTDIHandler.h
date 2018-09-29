@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #define FTD2XX_EXPORTS
 #include "ftd2xx.h"
 
@@ -8,23 +9,28 @@
 #define RS_DR 0x02 // se usa con or
 #define RS_IR 0xFD // se usa con and
 
-typedef BYTE unsigned char;
+#define BITMODE8 0x30
+#define BITMODE4 0x20 
+#define LINES2AND5x8 0x08
+#define DIPLAYONOFF 0x08
+#define CLEAR 0x01
+#define ENTRYMODE 0x07
 
 class FTDIHandler
 {
 public:
 	FTDIHandler();
 	//Escribe un byte al IR
-	void lcdWriteIR( BYTE valor );
+	void lcdWriteIR(uint8_t valor);
 	//Escribe un byte al DR
-	void lcdWriteDR( BYTE valor );
+	void lcdWriteDR(uint8_t valor);
 
 	~FTDIHandler();
 
 private:
 
-	void lcdWriteNibble( BYTE value);
-	bool set4BitsMode(void);
+	void lcdWriteNibble(uint8_t value);
+	void set4BitsMode(void);
 
 	FT_HANDLE deviceHandler;
 };

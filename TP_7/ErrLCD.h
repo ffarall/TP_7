@@ -3,7 +3,7 @@
 
 using namespace std;
 
-enum class ErrType{ LCD_NO_ERROR };
+enum class ErrType{ LCD_NO_ERROR , LCD_CHAGE_MODE_ERROR , LCD_SETTING_ERROR , LCD_NOT_FOUND , LCD_NO_ESCRIBE };
 
 class ErrLCD
 {
