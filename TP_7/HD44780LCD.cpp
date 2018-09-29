@@ -85,10 +85,27 @@ bool HD44780LCD::lcdMoveCursorUp()
 	{
 		handler->lcdWriteIR(SET_DDRAM_ADDRESS(cadd & 0x0F));		// Cursor goes to position in the first line, in whichever column it was before.
 		lcdUpdateCursor(cadd & 0x0F);
+		return true;
 	}
 	catch (ErrType type_)
 	{
 		err.set_type(type_);
+		return false;
+	}
+}
+
+bool HD44780LCD::lcdMoveCursorDown()
+{
+	try
+	{
+		handler->lcdWriteIR(SET_DDRAM_ADDRESS(cadd & 0x4F));		// Cursor goes to position in the first line, in whichever column it was before.
+		lcdUpdateCursor(cadd & 0x2F);
+		return true;
+	}
+	catch (ErrType type_)
+	{
+		err.set_type(type_);
+		return false;
 	}
 }
 
