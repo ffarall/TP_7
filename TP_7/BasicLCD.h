@@ -1,5 +1,6 @@
 #pragma once
 
+#define FTD2XX_EXPORTS
 #include "ftd2xx.h"
 
 struct cursorPosition 

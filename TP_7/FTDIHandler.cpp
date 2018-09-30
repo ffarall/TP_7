@@ -2,6 +2,7 @@
 #include <chrono>
 #include <windows.h>
 #include "ErrLCD.h"
+#include "delay.h"
 
 #define CONNECTING_TIME 5 //en segundos
 
@@ -31,11 +32,11 @@ FTDIHandler::FTDIHandler()
 				{
 					set4BitsMode();
 					lcdWriteIR(BITMODE4 | LINES2AND5x8);
-					//wait ( 1 )
+					delay(1);
 					lcdWriteIR(DIPLAYONOFF);
-					//wait ( 1 )
+					delay(1); 
 					lcdWriteIR(CLEAR);
-					//wait( 10 )
+					delay(10);
 					lcdWriteIR(ENTRYMODE);
 				}
 				catch ( ErrType type)
@@ -80,7 +81,7 @@ void FTDIHandler::lcdWriteDR(uint8_t valor)
 
 FTDIHandler::~FTDIHandler()
 {
-
+	FT_Close(deviceHandler);
 }
 
 void FTDIHandler::lcdWriteNibble(uint8_t value )
@@ -97,7 +98,7 @@ void FTDIHandler::lcdWriteNibble(uint8_t value )
 		//throw exepction 
 	}
 	status = !FT_OK;
-	//wait ( 2 ) // tiempo en milisegundos
+	delay(2); // tiempo en milisegundos
 
 	temp = value | ENABLE_1;
 	status = FT_Write(deviceHandler, &temp , 1, &bytesWriten);
@@ -107,7 +108,7 @@ void FTDIHandler::lcdWriteNibble(uint8_t value )
 		//throw exepction 
 	}
 	status = !FT_OK;
-	//wait ( 2 ) // tiempo en milisegundos
+	delay(2); // tiempo en milisegundos
 	
 	temp = value & ENABLE_0;
 	status = FT_Write(deviceHandler, &temp , 1, &bytesWriten);
@@ -117,7 +118,7 @@ void FTDIHandler::lcdWriteNibble(uint8_t value )
 		//throw exepction 
 	}
 	status = !FT_OK;
-	//wait ( 1 ) // tiempo en milisegundos
+	delay(1); // tiempo en milisegundos
 
 
 }
@@ -130,15 +131,15 @@ void FTDIHandler::set4BitsMode(void)
 	uint8_t value;
 
 	lcdWriteNibble(BITMODE8);
-	//wait ( 5 ) // tiempo en milisegundos
+	delay(5); // tiempo en milisegundos
 
 	lcdWriteNibble(BITMODE8);
-	//wait ( 1 ) // tiempo en milisegundos
+	delay(1); // tiempo en milisegundos
 
 	lcdWriteNibble(BITMODE8);
-	//wait ( 1 ) // tiempo en milisegundos
+	delay(1); // tiempo en milisegundos
 
 	lcdWriteNibble(BITMODE4);
-	// wait ( 1 ) // tiempo en ms
+	delay(1); // tiempo en ms
 
 }

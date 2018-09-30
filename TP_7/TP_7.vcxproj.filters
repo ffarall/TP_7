@@ -27,6 +27,9 @@
     <ClCompile Include="HD44780LCD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="delay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicLCD.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HD44780LCD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="delay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

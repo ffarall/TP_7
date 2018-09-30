@@ -85,6 +85,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>"C:\Users\arrib\source\repos\TP_7\TP_7\i386\ftd2xx.lib";%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -116,12 +119,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BasicLCD.cpp" />
+    <ClCompile Include="delay.cpp" />
     <ClCompile Include="ErrLCD.cpp" />
     <ClCompile Include="FTDIHandler.cpp" />
     <ClCompile Include="HD44780LCD.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicLCD.h" />
+    <ClInclude Include="delay.h" />
     <ClInclude Include="ErrLCD.h" />
     <ClInclude Include="ftd2xx.h" />
     <ClInclude Include="FTDIHandler.h" />
