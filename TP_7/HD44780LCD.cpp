@@ -77,6 +77,16 @@ bool HD44780LCD::lcdClearToEOL()
 	}
 }
 
+BasicLCD & HD44780LCD::operator<<(const unsigned char c)
+{
+	// TODO: insert return statement here
+}
+
+BasicLCD & HD44780LCD::operator<<(const unsigned char * c)
+{
+	// TODO: insert return statement here
+}
+
 bool HD44780LCD::lcdMoveCursorUp()
 {
 	try
