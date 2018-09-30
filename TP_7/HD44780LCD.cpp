@@ -3,7 +3,7 @@
 #define CLEAR_DISPLAY 0x01
 #define SPACE_ASCII 0x20
 #define SECOND_LINE_ADDRESS 0x40
-#define SET_DDRAM_ADDRESS(x) ((x) | (0x80))		// To the address x, makes sure bit 7 is 1, because instruction "Set DDRAM address" indicates it.
+#define SET_DDRAM_ADDRESS(x) ( ( ( (x)>15 ) ? ( ( (x) & (0xEF) )|(0x40) ) :(x) ) | (0x80) )		// To the address x, makes sure bit 7 is 1, because instruction "Set DDRAM address" indicates it.
 
 #define LCD_FIRST_POS 0
 #define LCD_LAST_POS 31
@@ -125,8 +125,8 @@ bool HD44780LCD::lcdMoveCursorDown()
 {
 	try
 	{
-		handler->lcdWriteIR(SET_DDRAM_ADDRESS(cadd & 0x4F));		// Cursor goes to position in the second line, in whichever column it was before.
-		lcdUpdateCursor(cadd & 0x1F);
+		handler->lcdWriteIR(SET_DDRAM_ADDRESS(cadd | 0x40));		// Cursor goes to position in the second line, in whichever column it was before.
+		lcdUpdateCursor(cadd | 0x10);
 		return true;
 	}
 	catch (ErrType type_)

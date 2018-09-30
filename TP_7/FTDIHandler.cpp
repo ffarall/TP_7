@@ -5,6 +5,19 @@
 #include "ErrLCD.h"
 #include "delay.h"
 
+#define ENABLE_0 0xFE //este tengo que hacer un and para usarlo 
+#define ENABLE_1 0x01 // este lo uso con or
+#define RS_DR 0x02 // se usa con or
+#define RS_IR 0xFD // se usa con and
+
+#define BITMODE8 0x30
+#define BITMODE4 0x20 
+#define LINES2AND5x8 0x08
+#define DIPLAYONOFF 0x0D
+#define CLEAR 0x01
+#define ENTRYMODE 0x06
+#define RETHOME 0x02
+
 #define CONNECTING_TIME 5 //en segundos
 
 FTDIHandler::FTDIHandler()
@@ -68,15 +81,15 @@ FTDIHandler::FTDIHandler()
 
 void FTDIHandler::lcdWriteIR(uint8_t valor)
 {
-	uint8_t temp =  ((valor & 0xF0) | ENABLE_1 & RS_IR ) ;
-	lcdWriteNibble(temp);
-	temp = (((valor & 0x0F) << 4) | ENABLE_1 & RS_IR);
+	uint8_t temp =  ((valor & 0xF0) | ENABLE_1 & RS_IR ) ; // primero escribo el nibble mas significativo 
+	lcdWriteNibble(temp);									// con el RS en 0
+	temp = (((valor & 0x0F) << 4) | ENABLE_1 & RS_IR); // despues el menos significativo
 	lcdWriteNibble(temp);
 }
 
 void FTDIHandler::lcdWriteDR(uint8_t valor)
 {
-	uint8_t temp = ((valor & 0xF0) | ENABLE_1 | RS_DR);
+	uint8_t temp = ((valor & 0xF0) | ENABLE_1 | RS_DR);  // mas significativo primero, con RS en 1
 	lcdWriteNibble(temp);
 	temp = (((valor & 0x0F) << 4) | ENABLE_1 | RS_DR);
 	lcdWriteNibble(temp);
@@ -85,8 +98,8 @@ void FTDIHandler::lcdWriteDR(uint8_t valor)
 
 FTDIHandler::~FTDIHandler()
 {
-	lcdWriteIR(CLEAR);
-	FT_Close(deviceHandler);
+	lcdWriteIR(CLEAR); // limpio el display antes de cerrarlo
+	FT_Close(deviceHandler); 
 }
 
 void FTDIHandler::lcdWriteNibble(uint8_t value )
@@ -96,17 +109,16 @@ void FTDIHandler::lcdWriteNibble(uint8_t value )
 	uint8_t temp;
 
 	temp = value & ENABLE_0;
-	status = FT_Write(deviceHandler, &temp , 1 , &bytesWriten);
+	status = FT_Write(deviceHandler, &temp , 1 , &bytesWriten); // dejo que se estabilice los datos y el RS
 	if (status != FT_OK)
 	{
 		throw ErrType::LCD_NO_ESCRIBE;
-		//throw exepction 
 	}
 	status = !FT_OK;
 	delay(2); // tiempo en milisegundos
 
 	temp = value | ENABLE_1;
-	status = FT_Write(deviceHandler, &temp , 1, &bytesWriten);
+	status = FT_Write(deviceHandler, &temp , 1, &bytesWriten); // ENABLE en 1 para que tome los datos
 	if (status != FT_OK)
 	{
 		throw ErrType::LCD_NO_ESCRIBE;
@@ -116,7 +128,7 @@ void FTDIHandler::lcdWriteNibble(uint8_t value )
 	delay(2); // tiempo en milisegundos
 	
 	temp = value & ENABLE_0;
-	status = FT_Write(deviceHandler, &temp , 1, &bytesWriten);
+	status = FT_Write(deviceHandler, &temp , 1, &bytesWriten); //Deja de tomar datos
 	if (status != FT_OK)
 	{
 		throw ErrType::LCD_NO_ESCRIBE;
@@ -131,7 +143,7 @@ void FTDIHandler::lcdWriteNibble(uint8_t value )
 void FTDIHandler::set4BitsMode(void)
 {
 
-	lcdWriteNibble(BITMODE8);
+	lcdWriteNibble(BITMODE8);  //le mando modo 8 bits
 	delay(5); // tiempo en milisegundos
 
 	lcdWriteNibble(BITMODE8);
@@ -140,7 +152,7 @@ void FTDIHandler::set4BitsMode(void)
 	lcdWriteNibble(BITMODE8);
 	delay(1); // tiempo en milisegundos
 
-	lcdWriteNibble(BITMODE4);
+	lcdWriteNibble(BITMODE4);  // modo 4 bits, a partir de ahora trabajo en modo 4 bits
 	delay(1); // tiempo en ms
 
 }
