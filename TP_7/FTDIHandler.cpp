@@ -32,15 +32,15 @@ FTDIHandler::FTDIHandler()
 				try
 				{
 					set4BitsMode();
-					lcdWriteIR(BITMODE4 | LINES2AND5x8);
+					lcdWriteIR(BITMODE4 | LINES2AND5x8); // modo 4 buts , 2 lineas , display 5x8
 					delay(1);
-					lcdWriteIR(DIPLAYONOFF);
+					lcdWriteIR(DIPLAYONOFF); // prendo el display
 					delay(1); 
-					lcdWriteIR(CLEAR);
+					lcdWriteIR(CLEAR); // limpio y mando el cursor al adress 0
 					delay(10);
-					lcdWriteIR(ENTRYMODE);
+					lcdWriteIR(ENTRYMODE); // Mueve el cursor despues de cada DR y NO!!! shiftea el display
 					delay(1);
-					lcdWriteIR(0x80);
+					lcdWriteIR(RETHOME); // cursor al adress 0
 					delay(2);
 				}
 				catch ( ErrType type)
@@ -85,6 +85,7 @@ void FTDIHandler::lcdWriteDR(uint8_t valor)
 
 FTDIHandler::~FTDIHandler()
 {
+	lcdWriteIR(CLEAR);
 	FT_Close(deviceHandler);
 }
 

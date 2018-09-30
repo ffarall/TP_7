@@ -9,8 +9,8 @@ int main(void)
 	try 
 	{
 		FTDIHandler primer;
-		primer.lcdWriteIR(0x0F);
-		string a =  "hola mundo" ;
+		string a =  "Hola mundo aaaaaaaaaaaaaaaaaaaaaaaa" ;
+		
 		for (char text : a)
 		{
 			primer.lcdWriteDR(text);
