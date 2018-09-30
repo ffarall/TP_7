@@ -1,6 +1,7 @@
 #include "FTDIHandler.h"
+
 #include <chrono>
-#include <windows.h>
+
 #include "ErrLCD.h"
 #include "delay.h"
 
@@ -19,7 +20,7 @@ FTDIHandler::FTDIHandler()
 
 	while (status != FT_OK && ((current - start) < MaxTime))//loop till succesful connection o max connecting time is exceeded
 	{
-		status = FT_Open(1, deviceHandler);
+		status = FT_Open(1, &deviceHandler);
 
 		if (status == FT_OK)
 		{

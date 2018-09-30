@@ -1,7 +1,12 @@
 #pragma once
 
 #include <cstdint>
+
+#include <windows.h>
+#ifndef FTD2XX_EXPORTS
 #define FTD2XX_EXPORTS
+#endif
+
 #include "ftd2xx.h"
 
 #define ENABLE_0 0xFE //este tengo que hacer un and para usarlo 

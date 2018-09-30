@@ -1,6 +1,10 @@
 #pragma once
 #include <iostream>
+
+#include <windows.h>
+#ifndef FTD2XX_EXPORTS
 #define FTD2XX_EXPORTS
+#endif
 #include "ftd2xx.h"
 
 using namespace std;
