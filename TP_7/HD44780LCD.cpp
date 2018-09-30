@@ -1,10 +1,9 @@
 #include "HD44780LCD.h"
-#include "ErrLCD.h"
 
 #define CLEAR_DISPLAY 0x01
 #define SPACE_ASCII 0x20
 #define SECOND_LINE_ADDRESS 0x40
-#define SET_DDRAM_ADDRESS(x) (x) | 0x80		// To the address x, makes sure bit 7 is 1, because instructio "Set DDRAM address" indicates it.
+#define SET_DDRAM_ADDRESS(x) ((x) | (0x80))		// To the address x, makes sure bit 7 is 1, because instructio "Set DDRAM address" indicates it.
 
 #define LCD_FIRST_POS 0
 #define LCD_LAST_POS 31
