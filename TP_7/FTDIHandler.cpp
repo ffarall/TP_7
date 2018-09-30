@@ -39,6 +39,9 @@ FTDIHandler::FTDIHandler()
 					lcdWriteIR(CLEAR);
 					delay(10);
 					lcdWriteIR(ENTRYMODE);
+					delay(1);
+					lcdWriteIR(0x80);
+					delay(2);
 				}
 				catch ( ErrType type)
 				{
@@ -126,10 +129,6 @@ void FTDIHandler::lcdWriteNibble(uint8_t value )
 
 void FTDIHandler::set4BitsMode(void)
 {
-	bool exito = false;
-	FT_STATUS status = !FT_OK;
-	DWORD bytesWriten;
-	uint8_t value;
 
 	lcdWriteNibble(BITMODE8);
 	delay(5); // tiempo en milisegundos
