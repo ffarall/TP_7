@@ -1,5 +1,6 @@
 #include "HD44780LCD.h"
 
+#include<string>
 #define CLEAR_DISPLAY 0x01
 #define SPACE_ASCII 0x20
 #define SECOND_LINE_ADDRESS 0x40
@@ -110,7 +111,7 @@ BasicLCD& HD44780LCD::operator<<(const unsigned char c)
 
 BasicLCD& HD44780LCD::operator<<(const unsigned char * c)
 {
-	string aux((const char*)c);
+	std::string aux((const char*)c);
 	for (char text : aux)
 	{
 		(*this) << text;

@@ -28,7 +28,7 @@ int main(void)
 		
 		HD44780LCD hola;
 
-		string a = "hola mundo hola mundo";
+		string a = "En EDA no anda  nada";
 
 		for (char text : a)
 		{
