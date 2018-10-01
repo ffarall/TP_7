@@ -10,16 +10,32 @@ int main(void)
 	try 
 	{
 		/*FTDIHandler primer;
-		string a =  "Hola mundo" ;
+		string a =  "ES DE UN CURSO";
+		string b = "SUPERIOR";
 		
 		for (char text : a)
 		{
 			primer.lcdWriteDR(text);
 		}
+		
+		primer.lcdWriteIR(0xC0);
+		getchar();
+		for (char text : b)
+		{
+			primer.lcdWriteDR(text);
+		}
 		getchar();*/
-
+		
 		HD44780LCD hola;
-		for (int i = 0; i < 5; i++) {
+
+		string a = "hola mundo hola mundo";
+
+		for (char text : a)
+		{
+			hola << text;
+		}
+
+		/*for (int i = 0; i < 5; i++) {
 			hola.lcdMoveCursorRight();
 			getchar();
 		}
@@ -36,8 +52,67 @@ int main(void)
 		std::cout << "fila " << hola.lcdGetCursorPosition().row << std::endl;
 		
 		hola.lcdMoveCursorUp();
-		
+		*/
 		getchar();
+
+		hola.lcdClear();
+		std::cout << "columna " << hola.lcdGetCursorPosition().column << std::endl;
+		std::cout << "fila " << hola.lcdGetCursorPosition().row << std::endl;
+
+		getchar();
+		
+		for (char text : a)
+		{
+			hola << text;
+		}
+		
+		hola.lcdMoveCursorUp();
+
+		std::cout << "columna " << hola.lcdGetCursorPosition().column << std::endl;
+		std::cout << "fila " << hola.lcdGetCursorPosition().row << std::endl;
+
+		getchar();
+
+		hola.lcdClearToEOL();
+
+		std::cout << "columna " << hola.lcdGetCursorPosition().column << std::endl;
+		std::cout << "fila " << hola.lcdGetCursorPosition().row << std::endl;
+
+		getchar();
+
+		hola << 'a' << 'b';
+
+		getchar();
+
+		hola.lcdClear();
+
+		a = "hola hola hola hola hola hola hola hola";
+
+		for (char text : a)
+		{
+			hola << text;
+		}
+
+		std::cout << "columna " << hola.lcdGetCursorPosition().column << std::endl;
+		std::cout << "fila " << hola.lcdGetCursorPosition().row << std::endl;
+
+		getchar();
+
+		for (int i = 0; i < 10; i++)
+		{
+			hola.lcdMoveCursorLeft();
+		}
+		
+		hola.lcdClearToEOL();
+		std::cout << "columna " << hola.lcdGetCursorPosition().column << std::endl;
+		std::cout << "fila " << hola.lcdGetCursorPosition().row << std::endl;
+
+		getchar();
+
+		hola.lcdClear();
+		hola << (const unsigned char *)"hola que tal??    todo bien :)";
+		getchar();
+	
 	}
 	catch (ErrType errores)
 	{

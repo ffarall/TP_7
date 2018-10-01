@@ -13,7 +13,7 @@
 #define BITMODE8 0x30
 #define BITMODE4 0x20 
 #define LINES2AND5x8 0x08
-#define DIPLAYONOFF 0x0D
+#define DIPLAYONOFF 0x0C
 #define CLEAR 0x01
 #define ENTRYMODE 0x06
 #define RETHOME 0x02

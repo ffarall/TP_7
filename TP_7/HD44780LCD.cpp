@@ -95,15 +95,27 @@ bool HD44780LCD::lcdClearToEOL()
 BasicLCD& HD44780LCD::operator<<(const unsigned char c)
 {
 	// TODO: insert return statement here
-	HD44780LCD temp;
-	return temp;
+	if ( ( cadd < 32) && ( cadd >= 0)) // si estoy en el medio de una fila 
+	{
+		handler->lcdWriteDR(c); //escribo display
+		cadd++; // incremento cursor
+	}
+
+	if (cadd == 16) // si cambie de linea tengo que updatear el cursor
+	{
+		handler->lcdWriteIR(SET_DDRAM_ADDRESS(0x40));
+	}
+	return *this;
 }
 
 BasicLCD& HD44780LCD::operator<<(const unsigned char * c)
 {
-	// TODO: insert return statement here
-	HD44780LCD temp;
-	return temp;
+	string aux((const char*)c);
+	for (char text : aux)
+	{
+		(*this) << text;
+	}
+	return *this;
 }
 
 bool HD44780LCD::lcdMoveCursorUp()
